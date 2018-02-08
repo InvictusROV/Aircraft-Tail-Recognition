@@ -9,6 +9,16 @@ BLUE = (255, 0, 0)
 TRIANGLE = 3
 RECTANGLE = 4
 
+# Defining the lower and upper limits for the 3 colors upon calibration
+LOWER_RED1 = np.array([0,100,120])
+UPPER_RED1 = np.array([10,255,255])
+LOWER_RED2 = np.array([170,100,120])
+UPPER_RED2 = np.array([180,255,255])
+LOWER_YELLOW = np.array([20,80,100])
+UPPER_YELLOW = np.array([40,255,255])
+LOWER_BLUE = np.array([80,80,40])
+UPPER_BLUE = np.array([125,255,255])
+
 # Function to draw the result on the lower right corner of an image
 def drawResult(color, shape, img):
     corners = np.array([])
@@ -95,26 +105,14 @@ while True:
     # Converting the colors from RGB to HSV
     hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
 
-    # Defining the lower and upper limits for the 3 colors
-    lower_red1 = np.array([0,100,120])
-    upper_red1 = np.array([10,255,255])
-    lower_red2 = np.array([170,100,120])
-    upper_red2 = np.array([180,255,255])
-    
-    lower_yellow = np.array([20,80,100])
-    upper_yellow = np.array([40,255,255])
-    
-    lower_blue = np.array([80,80,40])
-    upper_blue = np.array([125,255,255])
-
     # Generating a binary mask for the 3 colors
-    mask_red1 = cv.inRange(hsv, lower_red1, upper_red1)
-    mask_red2 = cv.inRange(hsv, lower_red2, upper_red2)
+    mask_red1 = cv.inRange(hsv, LOWER_RED1, UPPER_RED1)
+    mask_red2 = cv.inRange(hsv, LOWER_RED2, UPPER_RED2)
     mask_red = cv.bitwise_or(mask_red1, mask_red2)
     
-    mask_yellow = cv.inRange(hsv, lower_yellow, upper_yellow)
+    mask_yellow = cv.inRange(hsv, LOWER_YELLOW, UPPER_YELLOW)
     
-    mask_blue = cv.inRange(hsv, lower_blue, upper_blue)
+    mask_blue = cv.inRange(hsv, LOWER_BLUE, UPPER_BLUE)
 
     # Filtering colors
     red_filter = cv.bitwise_and(frame, frame, mask = mask_red)
